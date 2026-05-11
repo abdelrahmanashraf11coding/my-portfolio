@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — Abdelrahman Ashraf</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div class="login-logo">AA.</div>
+    <h2 class="login-title">Admin Panel</h2>
+    <p class="login-sub">Enter your password to continue</p>
+    <div class="login-field">
+      <input type="password" id="loginPassword" placeholder="Password" autocomplete="off">
+      <button onclick="doLogin()" id="loginBtn">Enter →</button>
+    </div>
+    <p id="loginError" class="login-error"></p>
+    <a href="index.html" class="back-link">← Back to Portfolio</a>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="adminDashboard" class="dashboard hidden">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">AA.</div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-tab="projects" onclick="switchTab('projects',this)">
+        <span class="nav-icon">🗂️</span> Projects
+      </a>
+      <a href="#" class="nav-item" data-tab="add" onclick="switchTab('add',this)">
+        <span class="nav-icon">➕</span> Add Project
+      </a>
+      <a href="#" class="nav-item" data-tab="analytics" onclick="switchTab('analytics',this)">
+        <span class="nav-icon">📈</span> Analytics
+      </a>
+      <a href="#" class="nav-item" data-tab="settings" onclick="switchTab('settings',this)">
+        <span class="nav-icon">⚙️</span> Settings
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="index.html" class="sidebar-link">🌐 View Site</a>
+      <button onclick="doLogout()" class="sidebar-logout">🔒 Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <header class="dash-header">
+      <div>
+        <h1 class="dash-title" id="tabTitle">Projects</h1>
+        <p class="dash-sub" id="tabSub">Manage your portfolio projects</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-add" onclick="switchTab('add', document.querySelector('[data-tab=add]'))">+ Add Project</button>
+      </div>
+    </header>
+
+    <!-- PROJECTS TAB -->
+    <div id="tab-projects" class="tab-content active">
+      <div class="stats-row">
+        <div class="stat-box"><span class="stat-n" id="countAll">0</span><span class="stat-l">Total</span></div>
+        <div class="stat-box"><span class="stat-n" id="countActive">0</span><span class="stat-l">Active</span></div>
+        <div class="stat-box"><span class="stat-n" id="countHidden">0</span><span class="stat-l">Hidden</span></div>
+      </div>
+      <div id="projectsList" class="projects-admin-grid"></div>
+    </div>
+
+    <!-- ADD / EDIT TAB -->
+    <div id="tab-add" class="tab-content">
+      <div class="form-card">
+        <h3 class="form-card-title" id="formCardTitle">New Project</h3>
+        <input type="hidden" id="editId">
+        <div class="field-grid">
+          <div class="field-group">
+            <label>Project Title *</label>
+            <input type="text" id="fTitle" placeholder="e.g. Sales Forecasting AI" class="field-input">
+          </div>
+          <div class="field-group">
+            <label>GitHub URL</label>
+            <input type="text" id="fGithub" placeholder="https://github.com/..." class="field-input">
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Description *</label>
+          <textarea id="fDesc" placeholder="Describe your project in detail..." class="field-textarea"></textarea>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label>Tags (comma separated)</label>
+            <input type="text" id="fTags" placeholder="Python, Pandas, ML" class="field-input">
+          </div>
+          <div class="field-group">
+            <label>Emoji Icon</label>
+            <input type="text" id="fEmoji" placeholder="📊" class="field-input" maxlength="4">
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label>Background Color</label>
+            <select id="fColor" class="field-input">
+              <option value="blue">Blue</option>
+              <option value="purple">Purple</option>
+              <option value="green">Green</option>
+              <option value="orange">Orange</option>
+              <option value="red">Red</option>
+              <option value="teal">Teal</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Status</label>
+            <select id="fStatus" class="field-input">
+              <option value="active">Active (Visible)</option>
+              <option value="hidden">Hidden</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Stats Badges (format: emoji text, one per line)</label>
+          <textarea id="fStats" placeholder="📦 128K Orders&#10;💰 71.6M ₹&#10;🔮 AI Forecast" class="field-textarea small"></textarea>
+        </div>
+        <!-- ===== MEDIA SECTION ===== -->
+        <div class="field-group">
+          <label>Project Media</label>
+          <div class="media-tabs">
+            <button type="button" class="media-tab active" onclick="switchMediaTab('upload',this)">📁 Upload File</button>
+            <button type="button" class="media-tab" onclick="switchMediaTab('url',this)">🔗 Image URL</button>
+            <button type="button" class="media-tab" onclick="switchMediaTab('video',this)">🎬 Video URL</button>
+          </div>
+
+          <!-- Upload File Tab -->
+          <div id="mediaTab-upload" class="media-tab-content active">
+            <div class="upload-zone" id="uploadZone"
+                 onclick="document.getElementById('fMediaFile').click()"
+                 ondragover="dragOverZone(event)"
+                 ondragleave="dragLeaveZone(event)"
+                 ondrop="dropOnZone(event)">
+              <div class="upload-icon">📂</div>
+              <p class="upload-text">Click or drag & drop image here</p>
+              <p class="upload-hint">PNG, JPG, GIF, WebP — max 5 MB</p>
+              <input type="file" id="fMediaFile" accept="image/*" style="display:none" onchange="handleFileUpload(this)">
+            </div>
+            <div id="uploadPreview" class="upload-preview hidden"></div>
+          </div>
+
+          <!-- Image URL Tab -->
+          <div id="mediaTab-url" class="media-tab-content">
+            <input type="text" id="fMediaUrl" placeholder="https://example.com/image.png" class="field-input"
+                   oninput="previewUrl(this.value)">
+            <div id="urlPreview" class="upload-preview hidden"></div>
+          </div>
+
+          <!-- Video URL Tab -->
+          <div id="mediaTab-video" class="media-tab-content">
+            <input type="text" id="fVideoUrl" placeholder="https://youtube.com/watch?v=... or https://..." class="field-input"
+                   oninput="previewVideo(this.value)">
+            <p class="upload-hint" style="margin-top:8px">Supports: YouTube, Vimeo, or direct video link (.mp4)</p>
+            <div id="videoPreview" class="upload-preview hidden"></div>
+          </div>
+
+          <!-- Current media indicator -->
+          <div id="currentMedia" class="current-media hidden">
+            <span class="current-media-label">Current media:</span>
+            <span id="currentMediaName"></span>
+            <button type="button" class="btn-remove-media" onclick="removeMedia()">✕ Remove</button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Arabic Title</label>
+          <input type="text" id="fTitleAr" placeholder="عنوان المشروع بالعربي" class="field-input" dir="auto">
+        </div>
+        <div class="field-group">
+          <label>Arabic Description</label>
+          <textarea id="fDescAr" placeholder="وصف المشروع بالعربي..." class="field-textarea" dir="auto"></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn-save" onclick="saveProject()">💾 Save Project</button>
+          <button class="btn-cancel" onclick="cancelEdit()">Cancel</button>
+        </div>
+        <p id="formFeedback" class="form-feedback-admin"></p>
+      </div>
+    </div>
+
+    <!-- ANALYTICS TAB -->
+    <div id="tab-analytics" class="tab-content">
+      <div class="analytics-grid">
+        <div class="analytics-box">
+          <div class="analytics-num" id="an-total">0</div>
+          <div class="analytics-label">Total Visits</div>
+        </div>
+        <div class="analytics-box">
+          <div class="analytics-num" id="an-today">0</div>
+          <div class="analytics-label">Today</div>
+        </div>
+        <div class="analytics-box">
+          <div class="analytics-num" id="an-projects">0</div>
+          <div class="analytics-label">Total Projects</div>
+        </div>
+      </div>
+      <div class="form-card">
+        <h3 class="form-card-title">📊 Site Analytics</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px">
+          <div class="info-row"><span class="info-key">Last Visit</span><span id="an-lastvisit" class="info-val-a">—</span></div>
+          <div class="info-row"><span class="info-key">Active Projects</span><span id="an-active" class="info-val-a">—</span></div>
+          <div class="info-row"><span class="info-key">Hidden Projects</span><span id="an-hidden" class="info-val-a">—</span></div>
+          <div class="info-row"><span class="info-key">Storage Used</span><span id="an-storage" class="info-val-a">—</span></div>
+        </div>
+        <button class="btn-danger" style="margin-top:28px" onclick="resetAnalytics()">🗑️ Reset Analytics</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div id="tab-settings" class="tab-content">
+      <div class="form-card">
+        <h3 class="form-card-title">Change Password</h3>
+        <div class="field-group">
+          <label>Current Password</label>
+          <input type="password" id="sCurrent" class="field-input" placeholder="Current password">
+        </div>
+        <div class="field-group">
+          <label>New Password</label>
+          <input type="password" id="sNew" class="field-input" placeholder="New password (min 6 chars)">
+        </div>
+        <div class="field-group">
+          <label>Confirm New Password</label>
+          <input type="password" id="sConfirm" class="field-input" placeholder="Repeat new password">
+        </div>
+        <button class="btn-save" onclick="changePassword()">🔐 Change Password</button>
+        <p id="settingsFeedback" class="form-feedback-admin"></p>
+      </div>
+      <div class="form-card" style="margin-top:24px">
+        <h3 class="form-card-title">Danger Zone</h3>
+        <p style="color:var(--muted);font-size:14px;margin-bottom:20px">Reset all projects to default portfolio data.</p>
+        <button class="btn-danger" onclick="resetToDefaults()">🔄 Reset to Default Projects</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div id="deleteModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-icon">🗑️</div>
+    <h3>Delete Project?</h3>
+    <p id="deleteModalName"></p>
+    <div class="modal-actions">
+      <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+      <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
