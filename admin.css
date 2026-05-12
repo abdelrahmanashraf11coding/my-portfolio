@@ -375,3 +375,56 @@ select.field-input option { background:var(--surface); }
 }
 .info-key   { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 .info-val-a { font-size: 18px; font-weight: 700; color: var(--accent); font-family: 'Syne', sans-serif; }
+
+/* ===== SKILLS ADMIN ===== */
+.skills-admin-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px;
+}
+.skill-admin-card {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 14px;
+  padding: 20px; display: flex; align-items: center; gap: 14px; transition: all 0.2s;
+}
+.skill-admin-card:hover { border-color: rgba(0,212,255,0.3); }
+.skill-admin-icon { font-size: 32px; flex-shrink: 0; }
+.skill-admin-info { flex: 1; min-width: 0; }
+.skill-admin-name { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; margin-bottom:4px; }
+.skill-admin-desc { font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.skill-admin-actions { display:flex; gap:6px; flex-shrink:0; }
+.btn-sk-edit   { padding:6px 12px; border-radius:6px; font-size:11px; font-weight:600; cursor:pointer; border:1px solid rgba(0,102,255,0.3); background:rgba(0,102,255,0.1); color:var(--accent2); font-family:'DM Sans',sans-serif; }
+.btn-sk-delete { padding:6px 12px; border-radius:6px; font-size:11px; font-weight:600; cursor:pointer; border:1px solid rgba(255,68,68,0.3); background:rgba(255,68,68,0.1); color:var(--danger); font-family:'DM Sans',sans-serif; }
+
+/* ===== THEME CUSTOMIZER ===== */
+.theme-presets { margin-bottom: 32px; }
+.preset-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;
+}
+.preset-btn {
+  padding: 12px; border-radius: 10px; border: none; cursor: pointer;
+  color: #fff; font-weight: 700; font-size: 13px; font-family:'DM Sans',sans-serif;
+  transition: all 0.25s; opacity: 0.85;
+}
+.preset-btn:hover { opacity: 1; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+
+.color-pickers { display: flex; flex-direction: column; gap: 16px; }
+.color-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 20px;
+}
+.color-row label { font-size: 14px; font-weight: 500; }
+.color-pick-wrap { display: flex; align-items: center; gap: 12px; }
+.color-picker {
+  width: 44px; height: 36px; border: none; border-radius: 8px;
+  cursor: pointer; padding: 2px; background: none; outline: none;
+}
+.color-hex {
+  font-family: monospace; font-size: 13px; color: var(--muted);
+  background: var(--surface); padding: 4px 10px; border-radius: 6px;
+  border: 1px solid var(--border); min-width: 80px; text-align: center;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:600px) {
+  .preset-grid { grid-template-columns: repeat(2,1fr); }
+  .color-row { flex-direction: column; align-items: flex-start; gap:10px; }
+}

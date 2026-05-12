@@ -37,6 +37,15 @@
       <a href="#" class="nav-item" data-tab="add" onclick="switchTab('add',this)">
         <span class="nav-icon">➕</span> Add Project
       </a>
+      <a href="#" class="nav-item" data-tab="skills" onclick="switchTab('skills',this)">
+        <span class="nav-icon">🧠</span> Skills
+      </a>
+      <a href="#" class="nav-item" data-tab="theme" onclick="switchTab('theme',this)">
+        <span class="nav-icon">🎨</span> Theme
+      </a>
+      <a href="#" class="nav-item" data-tab="siteinfo" onclick="switchTab('siteinfo',this)">
+        <span class="nav-icon">🌐</span> Site Info
+      </a>
       <a href="#" class="nav-item" data-tab="analytics" onclick="switchTab('analytics',this)">
         <span class="nav-icon">📈</span> Analytics
       </a>
@@ -241,6 +250,220 @@
         <h3 class="form-card-title">Danger Zone</h3>
         <p style="color:var(--muted);font-size:14px;margin-bottom:20px">Reset all projects to default portfolio data.</p>
         <button class="btn-danger" onclick="resetToDefaults()">🔄 Reset to Default Projects</button>
+      </div>
+    </div>
+
+    <!-- SKILLS TAB -->
+    <div id="tab-skills" class="tab-content">
+      <div class="form-card" style="max-width:100%">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px">
+          <h3 class="form-card-title" style="margin-bottom:0">Technical Skills</h3>
+          <button class="btn-add" onclick="openAddSkill()">+ Add Skill</button>
+        </div>
+        <div id="skillsList" class="skills-admin-grid"></div>
+      </div>
+
+      <!-- Add/Edit Skill Form -->
+      <div id="skillFormWrap" class="form-card hidden" style="margin-top:24px;max-width:100%">
+        <h3 class="form-card-title" id="skillFormTitle">New Skill</h3>
+        <input type="hidden" id="skillEditId">
+        <div class="field-grid">
+          <div class="field-group">
+            <label>Skill Name (EN) *</label>
+            <input type="text" id="skName" class="field-input" placeholder="e.g. Python">
+          </div>
+          <div class="field-group">
+            <label>Skill Name (AR)</label>
+            <input type="text" id="skNameAr" class="field-input" placeholder="بايثون" dir="auto">
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label>Icon (Emoji)</label>
+            <input type="text" id="skEmoji" class="field-input" placeholder="🐍" maxlength="4">
+          </div>
+          <div class="field-group">
+            <label>Description (EN)</label>
+            <input type="text" id="skDesc" class="field-input" placeholder="Short description...">
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Description (AR)</label>
+          <input type="text" id="skDescAr" class="field-input" placeholder="وصف قصير..." dir="auto">
+        </div>
+        <div class="form-actions">
+          <button class="btn-save" onclick="saveSkill()">💾 Save Skill</button>
+          <button class="btn-cancel" onclick="closeSkillForm()">Cancel</button>
+        </div>
+        <p id="skillFeedback" class="form-feedback-admin"></p>
+      </div>
+    </div>
+
+    <!-- THEME TAB -->
+    <div id="tab-theme" class="tab-content">
+      <div class="form-card" style="max-width:700px">
+        <h3 class="form-card-title">🎨 Theme Customizer</h3>
+        <p style="color:var(--muted);font-size:14px;margin-bottom:28px">Changes apply live to your portfolio. Click "Save Theme" to keep them.</p>
+
+        <div class="theme-presets">
+          <p style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Quick Presets</p>
+          <div class="preset-grid">
+            <button class="preset-btn" onclick="applyPreset('cyber')"    style="background:linear-gradient(135deg,#00d4ff,#0066ff)">Cyber Blue</button>
+            <button class="preset-btn" onclick="applyPreset('purple')"   style="background:linear-gradient(135deg,#9b59b6,#7b2fff)">Purple</button>
+            <button class="preset-btn" onclick="applyPreset('green')"    style="background:linear-gradient(135deg,#00d4aa,#00a855)">Green</button>
+            <button class="preset-btn" onclick="applyPreset('orange')"   style="background:linear-gradient(135deg,#ff8c00,#ff4444)">Orange</button>
+            <button class="preset-btn" onclick="applyPreset('pink')"     style="background:linear-gradient(135deg,#ff6eb4,#d63af9)">Pink</button>
+            <button class="preset-btn" onclick="applyPreset('gold')"     style="background:linear-gradient(135deg,#ffd700,#ff8c00)">Gold</button>
+          </div>
+        </div>
+
+        <div class="color-pickers">
+          <div class="color-row">
+            <label>Background Color</label>
+            <div class="color-pick-wrap">
+              <input type="color" id="thBg"      class="color-picker" value="#060a12" oninput="liveColor('--bg',this.value)">
+              <span id="thBgVal" class="color-hex">#060a12</span>
+            </div>
+          </div>
+          <div class="color-row">
+            <label>Surface Color</label>
+            <div class="color-pick-wrap">
+              <input type="color" id="thSurface"  class="color-picker" value="#0d1421" oninput="liveColor('--surface',this.value)">
+              <span id="thSurfaceVal" class="color-hex">#0d1421</span>
+            </div>
+          </div>
+          <div class="color-row">
+            <label>Accent Color (Cyan)</label>
+            <div class="color-pick-wrap">
+              <input type="color" id="thAccent"   class="color-picker" value="#00d4ff" oninput="liveColor('--accent',this.value)">
+              <span id="thAccentVal" class="color-hex">#00d4ff</span>
+            </div>
+          </div>
+          <div class="color-row">
+            <label>Accent 2 (Blue)</label>
+            <div class="color-pick-wrap">
+              <input type="color" id="thAccent2"  class="color-picker" value="#0066ff" oninput="liveColor('--accent2',this.value)">
+              <span id="thAccent2Val" class="color-hex">#0066ff</span>
+            </div>
+          </div>
+          <div class="color-row">
+            <label>Accent 3 (Purple)</label>
+            <div class="color-pick-wrap">
+              <input type="color" id="thAccent3"  class="color-picker" value="#7b2fff" oninput="liveColor('--accent3',this.value)">
+              <span id="thAccent3Val" class="color-hex">#7b2fff</span>
+            </div>
+          </div>
+          <div class="color-row">
+            <label>Text Color</label>
+            <div class="color-pick-wrap">
+              <input type="color" id="thText"     class="color-picker" value="#e8edf5" oninput="liveColor('--text',this.value)">
+              <span id="thTextVal" class="color-hex">#e8edf5</span>
+            </div>
+          </div>
+          <div class="color-row">
+            <label>Muted Color</label>
+            <div class="color-pick-wrap">
+              <input type="color" id="thMuted"    class="color-picker" value="#7a8899" oninput="liveColor('--muted',this.value)">
+              <span id="thMutedVal" class="color-hex">#7a8899</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions" style="margin-top:28px">
+          <button class="btn-save"   onclick="saveTheme()">💾 Save Theme</button>
+          <button class="btn-cancel" onclick="resetTheme()">↺ Reset to Default</button>
+        </div>
+        <p id="themeFeedback" class="form-feedback-admin"></p>
+      </div>
+    </div>
+
+    <!-- SITE INFO TAB -->
+    <div id="tab-siteinfo" class="tab-content">
+      <div class="form-card" style="max-width:700px">
+        <h3 class="form-card-title">🌐 Site Information</h3>
+        <div class="field-grid">
+          <div class="field-group">
+            <label>Full Name (EN)</label>
+            <input type="text" id="siName"    class="field-input" placeholder="Abdelrahman Ashraf">
+          </div>
+          <div class="field-group">
+            <label>Full Name (AR)</label>
+            <input type="text" id="siNameAr"  class="field-input" placeholder="عبدالرحمن أشرف" dir="auto">
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label>Job Title (EN)</label>
+            <input type="text" id="siTitle"   class="field-input" placeholder="Data Analyst & AI Automation Expert">
+          </div>
+          <div class="field-group">
+            <label>Job Title (AR)</label>
+            <input type="text" id="siTitleAr" class="field-input" placeholder="محلل بيانات وخبير أتمتة" dir="auto">
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Hero Description (EN)</label>
+          <textarea id="siDesc"   class="field-textarea" placeholder="I help businesses grow..."></textarea>
+        </div>
+        <div class="field-group">
+          <label>Hero Description (AR)</label>
+          <textarea id="siDescAr" class="field-textarea" placeholder="أساعد الشركات على النمو..." dir="auto"></textarea>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label>Email</label>
+            <input type="email" id="siEmail"  class="field-input" placeholder="your@email.com">
+          </div>
+          <div class="field-group">
+            <label>Phone</label>
+            <input type="text"  id="siPhone"  class="field-input" placeholder="01115713256">
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label>WhatsApp Number</label>
+            <input type="text"  id="siWhatsapp" class="field-input" placeholder="201115713256">
+          </div>
+          <div class="field-group">
+            <label>Location</label>
+            <input type="text"  id="siLocation" class="field-input" placeholder="Cairo, Egypt 🇪🇬">
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label>LinkedIn URL</label>
+            <input type="text" id="siLinkedin" class="field-input" placeholder="https://linkedin.com/in/...">
+          </div>
+          <div class="field-group">
+            <label>GitHub URL</label>
+            <input type="text" id="siGithub"   class="field-input" placeholder="https://github.com/...">
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label>Hero Stat 1 Label (EN)</label>
+            <input type="text" id="siStat1"   class="field-input" placeholder="Projects Built">
+          </div>
+          <div class="field-group">
+            <label>Hero Stat 1 Number</label>
+            <input type="text" id="siStat1n"  class="field-input" placeholder="3+">
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label>Hero Stat 2 Label (EN)</label>
+            <input type="text" id="siStat2"   class="field-input" placeholder="Records Analyzed">
+          </div>
+          <div class="field-group">
+            <label>Hero Stat 2 Number</label>
+            <input type="text" id="siStat2n"  class="field-input" placeholder="23K+">
+          </div>
+        </div>
+        <div class="form-actions" style="margin-top:8px">
+          <button class="btn-save" onclick="saveSiteInfo()">💾 Save Changes</button>
+          <button class="btn-cancel" onclick="resetSiteInfo()">↺ Reset to Default</button>
+        </div>
+        <p id="siteInfoFeedback" class="form-feedback-admin"></p>
       </div>
     </div>
 
